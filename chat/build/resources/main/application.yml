@@ -1,4 +1,0 @@
-ims:
-  gate:
-    port: 8090
-  prefix: http://localhost/ims
