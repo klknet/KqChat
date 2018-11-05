@@ -1,0 +1,83 @@
+package com.konglk.ims.auth;
+
+import com.konglk.common.constant.ImsConstants;
+import com.konglk.common.data.UserDO;
+import com.konglk.common.entity.UserVO;
+import com.konglk.common.model.Protocol;
+import com.konglk.ims.service.UserService;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
+import java.util.UUID;
+
+/**
+ * Created by konglk on 2018/8/13.
+ */
+@Service
+public class AuthService {
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private UserService userService;
+
+    /*
+    验证用户
+     */
+    public UserDO login(String unique, String pwd) {
+        if(StringUtils.isAnyEmpty(unique, pwd))
+            return null;
+        unique = decode(unique, "konglingkai");
+        pwd = decode(pwd, "qintiantian");
+        UserVO userVO = userService.selectUser(unique);
+        if(userVO == null)
+            return null;
+        String encrptedpwd = DigestUtils.md5DigestAsHex((userVO.getSugar()+pwd).getBytes());
+        if(userVO.getPwd().equals(encrptedpwd)) {
+            String cert = certificate(userVO.getUserId());
+            return new UserDO(userVO.getUserId(), cert);
+        }
+        return null;
+    }
+
+    public boolean isValidMsg(Protocol.CPrivateChat msg) {
+        if(msg == null || StringUtils.isEmpty(msg.getDestId()))
+            return false;
+        return userService.selectUser(msg.getDestId())==null;
+    }
+
+    public boolean isValidUser(String userId, String certificate) {
+        String cert = (String) redisTemplate.opsForHash().get(ImsConstants.IMS_USER_CERT, userId);
+        if(StringUtils.isEmpty(cert))
+            return false;
+        return cert.equals(certificate);
+    }
+
+    public String certificate(String userId) {
+        String cert = Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes());
+        redisTemplate.opsForHash().put(ImsConstants.IMS_USER_CERT, userId, cert);
+        return cert;
+    }
+
+    //解码
+    private String decode(String key, String sugar) {
+        Base64.Decoder decoder = Base64.getDecoder();
+        try {
+            String t1 = new String(decoder.decode(key),"utf8");
+            if(t1.startsWith(sugar))
+                key = t1.substring(sugar.length());
+        } catch (UnsupportedEncodingException e) {
+            logger.error(e.getMessage());
+        }
+        return key;
+    }
+
+}

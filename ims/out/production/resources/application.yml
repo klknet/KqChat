@@ -1,0 +1,29 @@
+spring:
+  datasource:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://39.106.133.40:3306/ims?useUnicode=true&characterEncoding=UTF-8
+      username: root
+      password: root
+  redis:
+    database: 0      # Redis数据库索引（默认为0）
+    host: 39.106.133.40  # Redis服务器地址
+    port: 6379       # Redis服务器连接端口
+
+server:
+  servlet:
+    context-path: /ims
+
+threadpool:
+  core-pool-size: 10
+  max-pool-size: 20
+  queue-capacity: 1000
+  keep-alive-seconds: 60
+
+fdfs:
+  so-timeout: 1501
+  connect-timeout: 601
+  thumb-image:             #缩略图生成参数
+    width: 150
+    height: 150
+  tracker-list:            #TrackerList参数,支持多个
+    39.106.133.40:22122
