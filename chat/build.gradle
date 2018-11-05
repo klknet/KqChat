@@ -4,22 +4,16 @@ plugins {
     id 'org.springframework.boot' version '2.0.4.RELEASE'
 }
 
-apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 sourceCompatibility = 1.8
+
+bootJar {
+    mainClassName = "com.konglk.chat.ChatApplication"
+}
 
 repositories {
 }
 
-jar {
-    manifest {
-        attributes 'Main-Class': 'com.konglk.chat.ChatApplication'
-    }
-    from {
-        //添加依懒到打包文件
-        //configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-        configurations.runtime.collect{zipTree(it)}
-    }
-}
 
 mainClassName = 'com.kongk.chat.ChatApplication'
 
