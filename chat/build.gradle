@@ -1,3 +1,7 @@
+buildscript {
+    ext {
+    }
+}
 plugins {
     id 'java'
     id 'application'
@@ -14,23 +18,19 @@ bootJar {
 repositories {
 }
 
-
 mainClassName = 'com.kongk.chat.ChatApplication'
-
-def springBootVersion = '2.0.4.RELEASE'
-def jacksonVersion = '2.9.5'
 
 dependencies {
     compile project(':common')
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: springBootVersion
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
-    compile group: 'org.springframework.boot', name:'spring-boot-starter-amqp', version: springBootVersion
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    compile group: 'org.springframework.boot', name:'spring-boot-starter-amqp'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "${jacksonVersion}"
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${jacksonVersion}"
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.6'
 
     compile group: 'io.netty', name: 'netty-all', version: '4.1.25.Final'
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 }
