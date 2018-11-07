@@ -1,6 +1,6 @@
 package com.konglk.ims.test;
 
-import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import com.konglk.common.entity.UserVO;
 import com.konglk.ims.service.UserService;
 import org.junit.Test;
@@ -20,7 +20,7 @@ public class UserTest {
 
     @Test
     public void testQueryPage() {
-        Page<UserVO> userVOS = userService.selectPageUsers(null, 1, 2);
+        PageInfo<UserVO> userVOS = userService.selectPageUsers(null, 1, 2);
         System.out.println(userVOS);
     }
 }
