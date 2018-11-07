@@ -31,17 +31,17 @@ import java.util.Collections;
 @Configuration
 public class BeanConfig {
 
-    @Value("${threadpool.core-pool-size}")
-    private int corePoolSize;
-
-    @Value("${threadpool.max-pool-size}")
-    private int maxPoolSize;
-
-    @Value("${threadpool.queue-capacity}")
-    private int queueCapacity;
-
-    @Value("${threadpool.keep-alive-seconds}")
-    private int keepAliveSeconds;
+//    @Value("${threadpool.core-pool-size}")
+//    private int corePoolSize;
+//
+//    @Value("${threadpool.max-pool-size}")
+//    private int maxPoolSize;
+//
+//    @Value("${threadpool.queue-capacity}")
+//    private int queueCapacity;
+//
+//    @Value("${threadpool.keep-alive-seconds}")
+//    private int keepAliveSeconds;
 
     @Bean
     ProtobufHttpMessageConverter protobufHttpMessageConverter() {
@@ -79,19 +79,19 @@ public class BeanConfig {
     }
 
 
-    @Bean
-    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
-        sessionFactoryBean.setDataSource(dataSource);
-        org.apache.ibatis.session.Configuration config = new org.apache.ibatis.session.Configuration();
-        config.setMapUnderscoreToCamelCase(true);
-
-        sessionFactoryBean.setConfiguration(config);
-        // 设置查找器
-        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sessionFactoryBean.setMapperLocations(resolver.getResources("classpath:/mapper/*.xml"));
-        return sessionFactoryBean.getObject();
-    }
+//    @Bean
+//    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+//        SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
+//        sessionFactoryBean.setDataSource(dataSource);
+//        org.apache.ibatis.session.Configuration config = new org.apache.ibatis.session.Configuration();
+//        config.setMapUnderscoreToCamelCase(true);
+//
+//        sessionFactoryBean.setConfiguration(config);
+//        // 设置查找器
+//        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+//        sessionFactoryBean.setMapperLocations(resolver.getResources("classpath:/mapper/*.xml"));
+//        return sessionFactoryBean.getObject();
+//    }
 
     @Bean
     public FilterRegistrationBean authFilter() {
@@ -121,15 +121,15 @@ public class BeanConfig {
         return bean;
     }
 
-    @Bean
-    public ThreadPoolTaskExecutor threadPoolTaskExecutor(){
-        ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();
-        pool.setKeepAliveSeconds(keepAliveSeconds);
-        pool.setCorePoolSize(corePoolSize);//核心线程池数
-        pool.setMaxPoolSize(maxPoolSize); // 最大线程
-        pool.setQueueCapacity(queueCapacity);//队列容量
-        pool.setRejectedExecutionHandler(new java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy()); //队列满，线程被拒绝执行策略
-        return pool;
-    }
+//    @Bean
+//    public ThreadPoolTaskExecutor threadPoolTaskExecutor(){
+//        ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();
+//        pool.setKeepAliveSeconds(keepAliveSeconds);
+//        pool.setCorePoolSize(corePoolSize);//核心线程池数
+//        pool.setMaxPoolSize(maxPoolSize); // 最大线程
+//        pool.setQueueCapacity(queueCapacity);//队列容量
+//        pool.setRejectedExecutionHandler(new java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy()); //队列满，线程被拒绝执行策略
+//        return pool;
+//    }
 
 }

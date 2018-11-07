@@ -1,6 +1,6 @@
 package com.konglk.ims.controller;
 
-import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import com.konglk.common.entity.UserData;
 import com.konglk.common.entity.UserVO;
 import com.konglk.ims.auth.AuthService;
@@ -40,7 +40,7 @@ public class UserController {
 
     @GetMapping
     public Object selectPageUsers(@RequestParam Map<String,Object> params, @RequestParam Integer pageNo, @RequestParam(required = false) Integer pageSize){
-        Page<UserVO> usersPage = userService.selectPageUsers(params, pageNo, pageSize);
+        PageInfo<UserVO> usersPage = userService.selectPageUsers(params, pageNo, pageSize);
         return usersPage;
     }
 

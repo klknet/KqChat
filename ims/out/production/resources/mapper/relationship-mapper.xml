@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.konglk.ims.mappers.RelationshipDao">
 
-    <select id="selectRelationshipByUserId" parameterType="String" resultType="com.konglk.common.entity.UserData">
+    <select id="selectRelationshipByUserId" parameterType="String" resultType="UserData">
         SELECT
             u.user_id as userId, u.username, u.nickname, u.img_url as imgUrl, u.cellphone, u.sex, u.city, u.country,
             (select ELT(interval( conv( hex( convert( left(u.nickname,1) using GBK)),16,10),
@@ -29,7 +29,7 @@
 
     </select>
 
-    <select id="selectNewFriendsByUserId" parameterType="String" resultType="com.konglk.common.entity.UserData">
+    <select id="selectNewFriendsByUserId" parameterType="String" resultType="UserData">
         SELECT
             u.user_id, u.username, u.nickname, u.img_url, u.cellphone, u.sex, u.city, u.country, temp.STATUS
         FROM

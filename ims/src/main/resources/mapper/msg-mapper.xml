@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.konglk.ims.mappers.MsgDao">
-    <insert id="insertMsg" parameterType="com.konglk.common.entity.MsgVO">
+    <insert id="insertMsg" parameterType="MsgVO">
       insert into ims_msg(msg_id,send_id,dest_id,msg_type,content,has_read,ts, conversation_id)
       values(#{msgId},#{sendId},#{destId},#{msgType},#{content},#{hasRead},#{ts}, #{conversationId})
     </insert>

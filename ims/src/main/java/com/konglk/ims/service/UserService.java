@@ -1,6 +1,7 @@
 package com.konglk.ims.service;
 
-import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.konglk.common.entity.UserVO;
 import com.konglk.ims.enums.UserConfig;
 import com.konglk.ims.mappers.UserDao;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -48,15 +48,9 @@ public class UserService {
         return userDao.selectUserById(userId);
     }
 
-    public Page<UserVO> selectPageUsers(Map<String, Object> params, Integer pageNo, Integer pageSize) {
-        Page<UserVO> page = new Page<>();
-        page.setPageNum(pageNo);
-        if (pageSize != null) {
-            page.setPageSize(pageSize);
-        }
-//        page.setParams(params);
-        List<UserVO> users = userDao.selectUsersByPage(page);
-        return page;
+    public PageInfo<UserVO> selectPageUsers(Map<String, Object> params, Integer pageNo, Integer pageSize) {
+        PageInfo<UserVO> userVOS = PageHelper.startPage(pageNo, pageSize).doSelectPageInfo(() -> userDao.selectUsersByPage(null));
+        return userVOS;
     }
 
 }

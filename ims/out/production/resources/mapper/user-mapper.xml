@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.konglk.ims.mappers.UserDao">
-    <insert id="insertUser" parameterType="com.konglk.common.entity.UserVO">
+    <insert id="insertUser" parameterType="UserVO">
       insert into ims_user(user_id,username,nickname,pwd,sugar,img_url,cellphone,sex,country,city,createtime,status,updatetime)
       values(#{userId},#{username},#{nickname},#{pwd},#{sugar},#{imgUrl},#{cellphone},#{sex},#{country},#{city},#{createtime},#{status},#{updatetime})
     </insert>
@@ -13,7 +13,7 @@
         from ims_user where user_id=#{userId} and status = 1
     </select>
 
-    <select id="selectUsersByPage" parameterType="com.github.pagehelper.Page" resultType="com.konglk.common.entity.UserVO">
+    <select id="selectUsersByPage" parameterType="com.github.pagehelper.Page" resultType="UserVO">
         select user_id as userId, img_url as imgUrl, country, city, username, nickname, sex, status, cellphone, createtime
         from ims_user
     </select>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias type="com.konglk.common.entity.RelationshipVO" alias="RelationshipVO"/>
+        <typeAlias type="com.konglk.common.entity.UserData" alias="UserData"/>
+        <typeAlias type="com.konglk.common.entity.UserVO" alias="UserVO"/>
+        <typeAlias type="com.konglk.common.entity.MsgVO" alias="MsgVO"/>
+        <typeAlias type="com.konglk.common.entity.ConversationVO" alias="ConversationVO"/>
+
+    </typeAliases>
+</configuration>

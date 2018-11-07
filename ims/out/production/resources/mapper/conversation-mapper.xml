@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.konglk.ims.mappers.ConversationDao">
-    <insert id="insertConversation" parameterType="com.konglk.common.entity.ConversationVO">
+    <insert id="insertConversation" parameterType="ConversationVO">
       insert into ims_conversation(conversation_id,user_id,dest_id,conversation_type,status,ts, last_date)
       values(#{conversationId},#{userId},#{destId},#{conversationType},#{status},#{ts}, #{lastDate})
     </insert>
@@ -35,7 +35,7 @@
         order by d.last_date desc
     </select>
 
-    <select id="selConversation" resultType="com.konglk.common.entity.ConversationVO">
+    <select id="selConversation" resultType="ConversationVO">
         select * from ims_conversation c
         where (c.user_id=#{sendId} and c.dest_id=#{destId}) or (c.user_id=#{destId} and c.dest_id=#{sendId})
     </select>
