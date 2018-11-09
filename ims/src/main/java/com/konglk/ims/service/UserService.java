@@ -6,6 +6,7 @@ import com.konglk.common.entity.UserVO;
 import com.konglk.ims.enums.UserConfig;
 import com.konglk.ims.mappers.UserDao;
 import com.konglk.ims.utils.EncryptUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
@@ -53,4 +54,9 @@ public class UserService {
         return userVOS;
     }
 
+    public void userUpdate(UserVO userVO) {
+        if(StringUtils.isEmpty(userVO.getUserId()))
+            return;
+        userDao.updateUserInfo(userVO);
+    }
 }

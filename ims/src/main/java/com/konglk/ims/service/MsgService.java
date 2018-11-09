@@ -1,5 +1,8 @@
 package com.konglk.ims.service;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.konglk.common.constant.ImsConstants;
@@ -111,5 +114,12 @@ public class MsgService {
         } catch (IOException e) {
             return "";
         }
+    }
+
+    public PageInfo<MsgVO> selectMsg(Object o, int page, int size) {
+        PageInfo<MsgVO> pageInfo = PageHelper.startPage(page, size).doSelectPageInfo(() -> {
+            msgDao.selectMsg();
+        });
+        return pageInfo;
     }
 }

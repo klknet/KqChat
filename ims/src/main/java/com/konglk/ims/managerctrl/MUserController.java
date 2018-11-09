@@ -1,11 +1,9 @@
 package com.konglk.ims.managerctrl;
 
+import com.konglk.common.entity.UserVO;
 import com.konglk.ims.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by konglk on 2018/10/31.
@@ -26,6 +24,11 @@ public class MUserController {
     @GetMapping("userDetail")
     public Object userDetail(@RequestParam String userId) {
         return userService.selecUserById(userId);
+    }
+
+    @PostMapping("userUpdate")
+    public void userUpdate(UserVO userVO) {
+        userService.userUpdate(userVO);
     }
 
 }

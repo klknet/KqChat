@@ -22,4 +22,8 @@
         limit #{pageSize}
     </select>
 
+    <select id="selectMsg" resultType="MsgVO">
+        select * from ims_msg t1
+    </select>
+
 </mapper>

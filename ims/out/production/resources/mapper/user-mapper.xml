@@ -17,4 +17,5 @@
         select user_id as userId, img_url as imgUrl, country, city, username, nickname, sex, status, cellphone, createtime
         from ims_user
     </select>
+
 </mapper>

@@ -29,4 +29,7 @@ public interface UserDao {
 
     List<UserVO> selectUsersByPage(Page<UserVO> page);
 
+    @Update("update ims_user set nickname=#{nickname}, user_id=#{userId} where user_id = #{userId}")
+    void updateUserInfo(UserVO userVO);
+
 }
