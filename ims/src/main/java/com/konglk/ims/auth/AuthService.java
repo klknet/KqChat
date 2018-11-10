@@ -1,5 +1,6 @@
 package com.konglk.ims.auth;
 
+import com.alibaba.fastjson.JSON;
 import com.konglk.common.constant.ImsConstants;
 import com.konglk.common.data.UserDO;
 import com.konglk.common.entity.UserVO;
@@ -52,19 +53,6 @@ public class AuthService {
             return false;
         return userService.selectUser(msg.getDestId())==null;
     }
-
-    public boolean isValidUser(String userId, String certificate) {
-        if(StringUtils.isEmpty(certificate)) {
-            return false;
-        }
-        HashOperations<String, String, UserDO> ops = redisTemplate.opsForHash();
-        UserDO userDO = ops.get(ImsConstants.IMS_USER_CERT, userId);
-        if(userDO == null)
-            return false;
-        return certificate.equals(userDO.certificate);
-    }
-
-
 
     //解码
     private String decode(String key, String sugar) {

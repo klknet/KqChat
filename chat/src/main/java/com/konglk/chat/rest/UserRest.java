@@ -24,7 +24,11 @@ public class UserRest extends BaseRest{
     public UserDO login(String unique, String pwd) {
         if(StringUtils.isAllBlank(unique, pwd))
             return null;
-        return restTemplate.getForObject(ims+"/user/login?unique={unique}&pwd={pwd}", UserDO.class, unique, pwd);
+        try {
+            return restTemplate.getForObject(ims+"/user/login?unique={unique}&pwd={pwd}", UserDO.class, unique, pwd);
+        } catch (RestClientException e) {
+            return null;
+        }
     }
 
     /*

@@ -1,5 +1,6 @@
 package com.konglk.ims.service;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.konglk.common.constant.ImsConstants;
 import com.konglk.common.data.UserDO;
@@ -9,6 +10,7 @@ import com.konglk.ims.enums.UserConfig;
 import com.konglk.ims.mappers.UserDao;
 import com.konglk.ims.utils.EncryptUtils;
 import com.konglk.ims.utils.PageImplWrapper;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by konglk on 2018/8/24.
@@ -87,19 +90,21 @@ public class UserService {
     用户在线状态
      */
     public UserDO.State userState(String userId) {
-        UserDO userDO = (UserDO) redisTemplate.opsForHash().get(ImsConstants.IMS_USER_CERT, userId);
-        if(userDO == null)
+        String userDO = (String) redisTemplate.opsForHash().get(ImsConstants.IMS_USER_CERT, userId);
+        if(StringUtils.isEmpty(userDO))
             return UserDO.State.OFFLINE;
-        return userDO.state;
+        return JSON.parseObject(userDO, UserDO.class).state;
     }
 
     /*
     批量用户接口
      */
     public List<UserDO> multiUserState(List<String> userIds) {
-        HashOperations<String, String, UserDO> ops = redisTemplate.opsForHash();
-        List<UserDO> list = ops.multiGet(ImsConstants.IMS_USER_CERT, userIds);
-        return list;
+        HashOperations<String, String, String> ops = redisTemplate.opsForHash();
+        List<String> list = ops.multiGet(ImsConstants.IMS_USER_CERT, userIds);
+        if(CollectionUtils.isEmpty(list))
+            return Collections.emptyList();
+        return list.stream().map(s -> JSON.parseObject(s, UserDO.class)).collect(Collectors.toList());
     }
 
     /*
@@ -109,13 +114,27 @@ public class UserService {
         String cert = Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes());
         UserDO userDO = new UserDO(userVO, UserDO.State.ONLINE, cert);
         // online
-        redisTemplate.opsForHash().put(ImsConstants.IMS_USER_CERT, userVO.getUserId(), userDO);
+        redisTemplate.opsForHash().put(ImsConstants.IMS_USER_CERT, userVO.getUserId(), JSON.toJSONString(userDO));
         return userDO;
     }
 
     //下线
     public void offline(String userId) {
         redisTemplate.opsForHash().delete(ImsConstants.IMS_USER_CERT, userId);
+    }
+
+    /*
+    校验用户
+     */
+    public boolean isValidUser(String userId, String certificate) {
+        if(StringUtils.isEmpty(certificate)) {
+            return false;
+        }
+        HashOperations<String, String, String> ops = redisTemplate.opsForHash();
+        String userDO = ops.get(ImsConstants.IMS_USER_CERT, userId);
+        if(StringUtils.isEmpty(userDO))
+            return false;
+        return certificate.equals(JSON.parseObject(userDO, UserDO.class).certificate);
     }
 
 
