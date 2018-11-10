@@ -23,7 +23,7 @@
     </select>
 
     <select id="selectMsg" resultType="MsgVO">
-        select * from ims_msg t1
+        select * from ims_msg t1 order by t1.ts desc
     </select>
 
 </mapper>
