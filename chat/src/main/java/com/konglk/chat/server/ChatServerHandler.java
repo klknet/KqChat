@@ -17,6 +17,7 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<Protocol.Prot
     private Logger logger = LoggerFactory.getLogger(getClass());
     private MessageDispatcher messageDispatcher = SpringUtils.getBean(MessageDispatcher.class);
 
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         logger.info("active a new channel " + ctx.channel().remoteAddress());

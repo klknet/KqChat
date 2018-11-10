@@ -13,8 +13,8 @@
         from ims_user where user_id=#{userId} and status = 1
     </select>
 
-    <select id="selectUsersByPage" parameterType="com.github.pagehelper.Page" resultType="UserVO">
-        select user_id as userId, img_url as imgUrl, country, city, username, nickname, sex, status, cellphone, createtime
+    <select id="selectUsersByPage" resultType="UserInfoDO">
+        select user_id, img_url, country, city, username, nickname, sex, status, cellphone, createtime
         from ims_user
     </select>
 

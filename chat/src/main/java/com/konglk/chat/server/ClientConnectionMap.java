@@ -1,12 +1,12 @@
 package com.konglk.chat.server;
 
+import com.konglk.chat.rest.UserRest;
+import com.konglk.chat.utils.SpringUtils;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import java.util.Base64;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -16,6 +16,7 @@ public class ClientConnectionMap {
     private static Logger logger = LoggerFactory.getLogger(ClientConnectionMap.class);
     private static ConcurrentHashMap<Long, ClientConnection> allClientConnectionMap = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<String, Long> userId2NetIdMap = new ConcurrentHashMap<>();
+    private static UserRest userRest = SpringUtils.getBean(UserRest.class);
 
     public static void addClientConnection(ChannelHandlerContext ctx) {
         ClientConnection c = new ClientConnection(ctx);
@@ -31,6 +32,7 @@ public class ClientConnectionMap {
         if(!StringUtils.isEmpty(userId))
             userId2NetIdMap.remove(userId);
         allClientConnectionMap.remove(netId);
+        userRest.offline(userId);
     }
 
     public static ClientConnection getClientConnection(Long netId) {

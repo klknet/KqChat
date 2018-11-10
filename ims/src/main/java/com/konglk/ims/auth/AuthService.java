@@ -9,13 +9,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
-import java.util.UUID;
 
 /**
  * Created by konglk on 2018/8/13.
@@ -42,8 +42,7 @@ public class AuthService {
             return null;
         String encrptedpwd = DigestUtils.md5DigestAsHex((userVO.getSugar()+pwd).getBytes());
         if(userVO.getPwd().equals(encrptedpwd)) {
-            String cert = certificate(userVO.getUserId());
-            return new UserDO(userVO.getUserId(), cert);
+            return userService.cacheUser(userVO);
         }
         return null;
     }
@@ -55,17 +54,17 @@ public class AuthService {
     }
 
     public boolean isValidUser(String userId, String certificate) {
-        String cert = (String) redisTemplate.opsForHash().get(ImsConstants.IMS_USER_CERT, userId);
-        if(StringUtils.isEmpty(cert))
+        if(StringUtils.isEmpty(certificate)) {
             return false;
-        return cert.equals(certificate);
+        }
+        HashOperations<String, String, UserDO> ops = redisTemplate.opsForHash();
+        UserDO userDO = ops.get(ImsConstants.IMS_USER_CERT, userId);
+        if(userDO == null)
+            return false;
+        return certificate.equals(userDO.certificate);
     }
 
-    public String certificate(String userId) {
-        String cert = Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes());
-        redisTemplate.opsForHash().put(ImsConstants.IMS_USER_CERT, userId, cert);
-        return cert;
-    }
+
 
     //解码
     private String decode(String key, String sugar) {

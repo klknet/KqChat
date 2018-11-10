@@ -73,25 +73,11 @@ public class BeanConfig {
         redisTemplate.setKeySerializer(stringRedisSerializer);
         redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
-        redisTemplate.setHashValueSerializer(stringRedisSerializer);
+        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
 
-
-//    @Bean
-//    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
-//        SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
-//        sessionFactoryBean.setDataSource(dataSource);
-//        org.apache.ibatis.session.Configuration config = new org.apache.ibatis.session.Configuration();
-//        config.setMapUnderscoreToCamelCase(true);
-//
-//        sessionFactoryBean.setConfiguration(config);
-//        // 设置查找器
-//        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-//        sessionFactoryBean.setMapperLocations(resolver.getResources("classpath:/mapper/*.xml"));
-//        return sessionFactoryBean.getObject();
-//    }
 
     @Bean
     public FilterRegistrationBean authFilter() {
@@ -120,16 +106,5 @@ public class BeanConfig {
         bean.setOrder(0);
         return bean;
     }
-
-//    @Bean
-//    public ThreadPoolTaskExecutor threadPoolTaskExecutor(){
-//        ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();
-//        pool.setKeepAliveSeconds(keepAliveSeconds);
-//        pool.setCorePoolSize(corePoolSize);//核心线程池数
-//        pool.setMaxPoolSize(maxPoolSize); // 最大线程
-//        pool.setQueueCapacity(queueCapacity);//队列容量
-//        pool.setRejectedExecutionHandler(new java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy()); //队列满，线程被拒绝执行策略
-//        return pool;
-//    }
 
 }

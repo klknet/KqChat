@@ -1,8 +1,6 @@
 package com.konglk.ims.controller;
 
-import com.github.pagehelper.PageInfo;
 import com.konglk.common.entity.UserData;
-import com.konglk.common.entity.UserVO;
 import com.konglk.ims.auth.AuthService;
 import com.konglk.ims.service.RelationshipService;
 import com.konglk.ims.service.UserService;
@@ -32,17 +30,17 @@ public class UserController {
         return authService.login(unique, pwd);
     }
 
+    @PutMapping("/offline")
+    public void offline(@RequestParam String userId) {
+        userService.offline(userId);
+    }
+
     @GetMapping("/profile/{userId}/{certificate}")
     public Object userProfile(@PathVariable("userId")String userId, @PathVariable("certificate")String certificate) {
-        Map<String,Object> userVO = userService.selecUserById(userId);
+        Map<String,Object> userVO = userService.selectUserById(userId);
         return userVO;
     }
 
-    @GetMapping
-    public Object selectPageUsers(@RequestParam Map<String,Object> params, @RequestParam Integer pageNo, @RequestParam(required = false) Integer pageSize){
-        PageInfo<UserVO> usersPage = userService.selectPageUsers(params, pageNo, pageSize);
-        return usersPage;
-    }
 
     /**
      * 查询好友列表
@@ -110,7 +108,7 @@ public class UserController {
      */
     @GetMapping("/{userId}/relationships/{toUser}/detail")
     public Object getFriendDetail(@PathVariable("userId")String userId, @PathVariable("toUser") String toUser) {
-        Map<String, Object> friend = userService.selecUserById(toUser);
+        Map<String, Object> friend = userService.selectUserById(toUser);
         return friend;
     }
 

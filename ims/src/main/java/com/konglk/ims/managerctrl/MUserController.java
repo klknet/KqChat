@@ -23,7 +23,7 @@ public class MUserController {
 
     @GetMapping("userDetail")
     public Object userDetail(@RequestParam String userId) {
-        return userService.selecUserById(userId);
+        return userService.selectUserById(userId);
     }
 
     @PostMapping("userUpdate")

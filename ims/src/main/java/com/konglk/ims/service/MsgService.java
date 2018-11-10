@@ -1,6 +1,5 @@
 package com.konglk.ims.service;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.tobato.fastdfs.domain.StorePath;
@@ -12,7 +11,10 @@ import com.konglk.common.model.Protocol;
 import com.konglk.ims.enums.MsgConfig;
 import com.konglk.ims.mappers.MsgDao;
 import com.konglk.ims.utils.IdBuilder;
+import com.konglk.ims.utils.PageImplWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -116,10 +118,8 @@ public class MsgService {
         }
     }
 
-    public PageInfo<MsgVO> selectMsg(Object o, int page, int size) {
-        PageInfo<MsgVO> pageInfo = PageHelper.startPage(page, size).doSelectPageInfo(() -> {
-            msgDao.selectMsg();
-        });
-        return pageInfo;
+    public Page<MsgVO> selectMsg(Object o, int page, int size) {
+        com.github.pagehelper.Page<MsgVO> pageInfo = PageHelper.startPage(page, size).doSelectPage(()->msgDao.selectMsg());
+        return PageImplWrapper.of(pageInfo);
     }
 }

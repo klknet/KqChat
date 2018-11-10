@@ -5,10 +5,9 @@ package com.konglk.common.constant;
  */
 public class ImsConstants {
     public static String IMS_USERS= "ims_users";
-    public static String IMS_MESSAGES = "ims_messages";
-    public static String IMS_NOT_READ_MESSAGES = "ims_not_read_messages";
     public static String IMS_UNREAD_COUNT = "ims_unread_count";
     public static String IMS_USER_CERT = "ims_user_cert";
+    public static String IMS_USER_STATE = "ims_user_state";
 
     public static int SUCCESS_CODE = 200;
     public static int FAIL_CODE = 500;

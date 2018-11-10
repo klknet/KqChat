@@ -1,6 +1,7 @@
 package com.konglk.ims.mappers;
 
 import com.github.pagehelper.Page;
+import com.konglk.common.data.UserInfoDO;
 import com.konglk.common.entity.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -27,7 +28,7 @@ public interface UserDao {
 
     Map<String, Object> selectUserById(String userId);
 
-    List<UserVO> selectUsersByPage(Page<UserVO> page);
+    List<UserInfoDO> selectUsersByPage(Map<String, String> params);
 
     @Update("update ims_user set nickname=#{nickname}, user_id=#{userId} where user_id = #{userId}")
     void updateUserInfo(UserVO userVO);
