@@ -1,5 +1,5 @@
 rootProject.name = 'KqChat'
 include 'common'
-include 'chat'
 include 'ims'
+include 'chat'
 

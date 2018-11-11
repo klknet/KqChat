@@ -1,14 +1,12 @@
 package com.konglk.ims.test;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageInfo;
-import com.konglk.common.entity.UserVO;
+import com.konglk.common.data.UserInfoDO;
 import com.konglk.ims.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
@@ -22,7 +20,7 @@ public class UserTest {
 
     @Test
     public void testQueryPage() {
-        PageImpl<UserVO> userVOS = userService.selectPageUsers(null, 1, 2);
+        Page<UserInfoDO> userVOS = userService.selectPageUsers(null, 1, 2);
         System.out.println(userVOS);
     }
 }

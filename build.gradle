@@ -1,14 +1,14 @@
-plugins {
-    id 'java'
-}
-
 allprojects {
-    ext{
-        jacksonVersion = '2.9.5'
-        mybatisVersion = '3.4.6'
-    }
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
+    }
+}
+
+subprojects {
+    
+    ext {
+        jacksonVersion = '2.9.5'
+        mybatisVersion = '3.4.6'
     }
 
     repositories {
@@ -17,9 +17,6 @@ allprojects {
         }
         mavenLocal()
     }
-}
-
-subprojects {
     group 'com.konglk'
     version '1.0.0'
 
@@ -29,12 +26,10 @@ subprojects {
 group 'com.konglk'
 version '1.0.0'
 
-sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
