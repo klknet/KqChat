@@ -4,6 +4,12 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.konglk.ims.auth.AuthFilter;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.util.Factory;
+import org.apache.shiro.web.servlet.ShiroFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,18 +30,6 @@ import java.util.Collections;
  */
 @Configuration
 public class BeanConfig {
-
-//    @Value("${threadpool.core-pool-size}")
-//    private int corePoolSize;
-//
-//    @Value("${threadpool.max-pool-size}")
-//    private int maxPoolSize;
-//
-//    @Value("${threadpool.queue-capacity}")
-//    private int queueCapacity;
-//
-//    @Value("${threadpool.keep-alive-seconds}")
-//    private int keepAliveSeconds;
 
     @Bean
     ProtobufHttpMessageConverter protobufHttpMessageConverter() {
@@ -100,5 +94,20 @@ public class BeanConfig {
         bean.setOrder(0);
         return bean;
     }
+
+//    @Bean
+//    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
+//        ShiroFilterFactoryBean registration = new ShiroFilterFactoryBean();
+//        ShiroFilter shiroFilter = new ShiroFilter();
+//        registration.setSecurityManager(securityManager);
+//        return registration;
+//    }
+//
+//    @Bean
+//    public SecurityManager securityManager(){
+//        Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
+//        SecurityManager securityManager = factory.getInstance();
+//        return securityManager;
+//    }
 
 }

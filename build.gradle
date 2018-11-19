@@ -15,7 +15,6 @@ subprojects {
         maven {
             url "http://maven.aliyun.com/nexus/content/groups/public/"
         }
-        mavenLocal()
     }
     group 'com.konglk'
     version '1.0.0'
