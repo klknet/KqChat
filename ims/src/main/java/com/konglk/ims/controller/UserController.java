@@ -1,7 +1,6 @@
 package com.konglk.ims.controller;
 
 import com.konglk.common.entity.UserData;
-import com.konglk.ims.auth.AuthService;
 import com.konglk.ims.service.RelationshipService;
 import com.konglk.ims.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +18,13 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
-    @Autowired
-    private AuthService authService;
 
     @Autowired
     private RelationshipService relationshipService;
 
     @GetMapping("/login")
     public Object login(@RequestParam String unique, @RequestParam String pwd) {
-        return authService.login(unique, pwd);
+        return userService.login(unique, pwd);
     }
 
     @PutMapping("/offline")

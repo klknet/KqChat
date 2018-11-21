@@ -3,6 +3,7 @@ package com.konglk.ims.managerctrl;
 import com.konglk.common.entity.UserVO;
 import com.konglk.ims.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -10,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/manager/user")
-public class MUserController {
+@PreAuthorize("hasRole('USER')")
+public class MUserCtrl {
 
     @Autowired
     private UserService userService;

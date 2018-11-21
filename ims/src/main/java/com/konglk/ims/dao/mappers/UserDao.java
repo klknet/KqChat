@@ -1,6 +1,5 @@
-package com.konglk.ims.mappers;
+package com.konglk.ims.dao.mappers;
 
-import com.github.pagehelper.Page;
 import com.konglk.common.data.UserInfoDO;
 import com.konglk.common.entity.UserVO;
 import org.apache.ibatis.annotations.Mapper;

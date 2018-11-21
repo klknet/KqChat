@@ -1,4 +1,4 @@
-package com.konglk.ims.mappers;
+package com.konglk.ims.dao.mappers;
 
 import com.konglk.common.entity.MsgVO;
 import org.apache.ibatis.annotations.Mapper;

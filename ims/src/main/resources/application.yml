@@ -4,14 +4,24 @@ spring:
       url: jdbc:mysql://39.106.133.40:3306/ims?useUnicode=true&characterEncoding=UTF-8
       username: root
       password: root
-  redis:
-    database: 0      # Redis数据库索引（默认为0）
-    host: 39.106.133.40  # Redis服务器地址
-    port: 6379       # Redis服务器连接端口
+  security:
+    user:
+      name: konglk
+      password: konglk
+  data:
+    mongodb:
+      host: 39.106.133.40
+      port: 27017
+      database: ims
+    redis:
+      database: 0      # Redis数据库索引（默认为0）
+      host: 39.106.133.40  # Redis服务器地址
+      port: 6379       # Redis服务器连接端口
 
 server:
   servlet:
     context-path: /ims
+  port: 8080
 
 threadpool:
   core-pool-size: 10
@@ -31,3 +41,16 @@ fdfs:
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   config-location: classpath:mybatis-config.xml
+
+logging:
+  level:
+    org.springframework:
+      data: info
+      security: debug
+
+jwt:
+  header: Authorization
+  secret: ImsSecret
+  expiration: 3600
+  tokenHead: "Bearer "
+

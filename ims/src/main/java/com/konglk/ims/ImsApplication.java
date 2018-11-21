@@ -7,6 +7,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.jmx.support.RegistrationPolicy;
 
 /**
@@ -15,6 +16,7 @@ import org.springframework.jmx.support.RegistrationPolicy;
 @SpringBootApplication
 @Import({FdfsClientConfig.class})
 @EnableMBeanExport(registration = RegistrationPolicy.IGNORE_EXISTING)
+@EnableMongoRepositories("com.konglk.ims.dao.mongod")
 public class ImsApplication extends SpringBootServletInitializer {
 
     @Override

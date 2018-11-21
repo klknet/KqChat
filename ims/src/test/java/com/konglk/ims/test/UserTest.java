@@ -1,6 +1,8 @@
 package com.konglk.ims.test;
 
 import com.konglk.common.data.UserInfoDO;
+import com.konglk.ims.security.SysUserVO;
+import com.konglk.ims.service.AuthService;
 import com.konglk.ims.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,10 +19,21 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class UserTest {
     @Autowired
     private UserService userService;
+    @Autowired
+    private AuthService authService;
 
     @Test
     public void testQueryPage() {
         Page<UserInfoDO> userVOS = userService.selectPageUsers(null, 1, 2);
         System.out.println(userVOS);
+    }
+
+    @Test
+    public void testInsertUser() {
+        SysUserVO sysUserVO = new SysUserVO();
+        sysUserVO.setUsername("konglingkai");
+        sysUserVO.setPassword("konglk");
+
+        authService.register(sysUserVO);
     }
 }

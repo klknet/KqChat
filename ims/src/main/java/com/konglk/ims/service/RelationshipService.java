@@ -3,7 +3,7 @@ package com.konglk.ims.service;
 import com.konglk.common.entity.RelationshipVO;
 import com.konglk.common.entity.UserData;
 import com.konglk.ims.enums.RelationshipConfig;
-import com.konglk.ims.mappers.RelationshipDao;
+import com.konglk.ims.dao.mappers.RelationshipDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

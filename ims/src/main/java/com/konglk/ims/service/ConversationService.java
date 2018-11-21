@@ -2,7 +2,7 @@ package com.konglk.ims.service;
 
 import com.konglk.common.entity.ConversationVO;
 import com.konglk.ims.common.DataProcess;
-import com.konglk.ims.mappers.ConversationDao;
+import com.konglk.ims.dao.mappers.ConversationDao;
 import com.konglk.ims.utils.DateFormatter;
 import com.konglk.ims.utils.IdBuilder;
 import org.springframework.beans.factory.annotation.Autowired;

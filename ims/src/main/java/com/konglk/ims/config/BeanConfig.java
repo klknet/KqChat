@@ -3,13 +3,6 @@ package com.konglk.ims.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.konglk.ims.auth.AuthFilter;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.config.IniSecurityManagerFactory;
-import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.util.Factory;
-import org.apache.shiro.web.servlet.ShiroFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -66,18 +59,6 @@ public class BeanConfig {
         return redisTemplate;
     }
 
-
-    @Bean
-    public FilterRegistrationBean authFilter() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new AuthFilter());//添加过滤器
-        String[] patterns = { "/conversation/*"};//设置过滤路径，/*所有路径
-        registration.addUrlPatterns(patterns);
-        registration.setName("AuthFilter");//设置优先级
-        registration.setOrder(1);//设置优先级
-        return registration;
-    }
-
     @Bean
     public FilterRegistrationBean corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -94,20 +75,5 @@ public class BeanConfig {
         bean.setOrder(0);
         return bean;
     }
-
-//    @Bean
-//    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
-//        ShiroFilterFactoryBean registration = new ShiroFilterFactoryBean();
-//        ShiroFilter shiroFilter = new ShiroFilter();
-//        registration.setSecurityManager(securityManager);
-//        return registration;
-//    }
-//
-//    @Bean
-//    public SecurityManager securityManager(){
-//        Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
-//        SecurityManager securityManager = factory.getInstance();
-//        return securityManager;
-//    }
 
 }
