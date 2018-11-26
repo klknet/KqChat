@@ -51,6 +51,6 @@ logging:
 jwt:
   header: Authorization
   secret: ImsSecret
-  expiration: 3600
+  expiration: 1800
   tokenHead: "Bearer "
 

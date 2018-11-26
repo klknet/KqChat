@@ -12,9 +12,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
@@ -33,9 +33,9 @@ public class AuthServiceImpl implements AuthService {
     private SysUserDao userRepository;
     @Autowired
     BCryptPasswordEncoder encoder;
-
     @Value("${jwt.tokenHead}")
     private String tokenHead;
+
 
     @Override
     public SysUserVO register(SysUserVO userToAdd) {
@@ -64,12 +64,36 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public void logout() {
+    }
+
+    @Override
     public String refresh(String oldToken) {
         final String token = oldToken.substring(tokenHead.length());
         String username = jwtTokenUtil.getUsernameFromToken(token);
         JwtSysUser userDetails = (JwtSysUser) userDetailsService.loadUserByUsername(username);
         if (jwtTokenUtil.canTokenBeRefreshed(token, userDetails.getLastPwdResetDate())){
             return jwtTokenUtil.refreshToken(token);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean validToken(String token) {
+        if(StringUtils.isEmpty(token))
+            return false;
+        if(token.startsWith(tokenHead)) {
+            return jwtTokenUtil.validToken(token.substring(tokenHead.length()), null);
+        }
+        return false;
+    }
+
+    @Override
+    public String getUsername(String token) {
+        if(StringUtils.isEmpty(token))
+            return null;
+        if(token.startsWith(tokenHead)) {
+            return jwtTokenUtil.getUsernameFromToken(token.substring(tokenHead.length()));
         }
         return null;
     }

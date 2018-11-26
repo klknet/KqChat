@@ -1,9 +1,11 @@
 package com.konglk.ims.utils;
 
+import com.konglk.ims.security.ImsUserDetailService;
 import com.konglk.ims.security.JwtSysUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,8 @@ public class JwtTokenUtils implements Serializable {
     private String secret;
     @Value("${jwt.expiration}")
     private Long expiration;
+    @Autowired
+    private ImsUserDetailService userDetailsService;
 
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
@@ -120,11 +124,12 @@ public class JwtTokenUtils implements Serializable {
         return refreshedToken;
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        JwtSysUser user = (JwtSysUser) userDetails;
+    public Boolean validToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         final Date created = getCreatedDateFromToken(token);
-        //final Date expiration = getExpirationDateFromToken(token);
+        if(userDetails == null)
+            userDetails = userDetailsService.loadUserByUsername(username);
+        JwtSysUser user = (JwtSysUser) userDetails;
         return (
                 username.equals(user.getUsername())
                         && !isTokenExpired(token)

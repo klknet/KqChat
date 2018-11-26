@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/manager/msg")
-@PreAuthorize("hasRole('MANAGER')")
+@PreAuthorize("hasRole('USER')")
 public class MMsgCtrl {
     @Autowired
     private MsgService msgService;
