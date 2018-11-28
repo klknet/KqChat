@@ -24,14 +24,13 @@ bootWar {
 
 dependencies {
     compile project(':common')
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    compile("org.springframework.boot:spring-boot-starter-web")
+    compile ("org.springframework.boot:spring-boot-starter-web")
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-amqp'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb'
-    compileOnly group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat'
+    providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
     compile("io.jsonwebtoken:jjwt:0.9.0")
     compile group: 'com.github.tobato', name: 'fastdfs-client', version: '1.26.2'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "${jacksonVersion}"

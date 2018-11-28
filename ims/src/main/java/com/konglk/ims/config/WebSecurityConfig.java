@@ -63,7 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/", "/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js").permitAll()
                 .antMatchers("/auth/**").permitAll()//获取token的api允许访问
                 //除以上资源外需要鉴权
-                .anyRequest().authenticated();
+                .antMatchers("/manager/**").authenticated();
+//                .anyRequest().authenticated();
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
         http.headers().cacheControl();//禁用缓存
     }
