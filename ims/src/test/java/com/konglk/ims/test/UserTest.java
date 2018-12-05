@@ -11,6 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by konglk on 2018/11/7.
  */
@@ -35,5 +38,10 @@ public class UserTest {
         sysUserVO.setPassword("konglk");
 
         authService.register(sysUserVO);
+    }
+
+    @Test
+    public void testStream() {
+
     }
 }

@@ -32,8 +32,8 @@ public class UserController {
         userService.offline(userId);
     }
 
-    @GetMapping("/profile/{userId}/{certificate}")
-    public Object userProfile(@PathVariable("userId")String userId, @PathVariable("certificate")String certificate) {
+    @GetMapping("/profile")
+    public Object userProfile(@RequestParam("userId")String userId) {
         Map<String,Object> userVO = userService.selectUserById(userId);
         return userVO;
     }

@@ -4,10 +4,6 @@ spring:
       url: jdbc:mysql://39.106.133.40:3306/ims?useUnicode=true&characterEncoding=UTF-8
       username: root
       password: root
-  security:
-    user:
-      name: konglk
-      password: konglk
   data:
     mongodb:
       host: 39.106.133.40
@@ -46,7 +42,7 @@ logging:
   level:
     org.springframework:
       data: info
-      security: debug
+      security: info
 
 jwt:
   header: Authorization
