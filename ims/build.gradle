@@ -8,7 +8,6 @@ plugins {
     id 'org.springframework.boot' version '2.0.4.RELEASE'
 }
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'idea'
 
 sourceCompatibility = 1.8
 
