@@ -1,6 +1,6 @@
 package com.konglk.ims.dao.mongod;
 
-import com.konglk.ims.security.SysUserVO;
+import com.konglk.ims.entity.SysUserVO;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Component;
 

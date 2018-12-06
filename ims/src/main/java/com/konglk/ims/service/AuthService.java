@@ -1,6 +1,6 @@
 package com.konglk.ims.service;
 
-import com.konglk.ims.security.SysUserVO;
+import com.konglk.ims.entity.SysUserVO;
 
 public interface AuthService {
     SysUserVO register(SysUserVO userToAdd);

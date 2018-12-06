@@ -1,4 +1,4 @@
-package com.konglk.ims.security;
+package com.konglk.ims.entity;
 
 import com.konglk.common.entity.BaseEntity;
 import org.springframework.data.annotation.Id;

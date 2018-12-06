@@ -1,5 +1,6 @@
 package com.konglk.ims.security;
 
+import com.konglk.ims.entity.SysUserVO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

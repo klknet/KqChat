@@ -1,6 +1,7 @@
 package com.konglk.ims.controller;
 
 import com.konglk.common.entity.UserData;
+import com.konglk.ims.service.MongoUserService;
 import com.konglk.ims.service.RelationshipService;
 import com.konglk.ims.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,17 @@ public class UserController {
     @Autowired
     private RelationshipService relationshipService;
 
+    @Autowired
+    private MongoUserService mongoUserService;
+
     @GetMapping("/login")
     public Object login(@RequestParam String unique, @RequestParam String pwd) {
-        return userService.login(unique, pwd);
+        return mongoUserService.login(unique, pwd);
     }
 
     @PutMapping("/offline")
     public void offline(@RequestParam String userId) {
-        userService.offline(userId);
+        mongoUserService.offline(userId);
     }
 
     @GetMapping("/profile")

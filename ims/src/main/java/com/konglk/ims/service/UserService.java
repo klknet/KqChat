@@ -63,7 +63,7 @@ public class UserService {
     }
 
     //解码
-    private String decode(String key, String sugar) {
+    protected String decode(String key, String sugar) {
         Base64.Decoder decoder = Base64.getDecoder();
         try {
             String t1 = new String(decoder.decode(key),"utf8");

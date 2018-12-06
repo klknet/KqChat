@@ -3,7 +3,7 @@ package com.konglk.ims.service;
 import com.konglk.ims.dao.mongod.SysUserDao;
 import com.konglk.ims.security.ImsUserDetailService;
 import com.konglk.ims.security.JwtSysUser;
-import com.konglk.ims.security.SysUserVO;
+import com.konglk.ims.entity.SysUserVO;
 import com.konglk.ims.utils.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

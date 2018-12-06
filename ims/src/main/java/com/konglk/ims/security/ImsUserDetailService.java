@@ -1,6 +1,7 @@
 package com.konglk.ims.security;
 
 import com.konglk.ims.dao.mongod.SysUserDao;
+import com.konglk.ims.entity.SysUserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
