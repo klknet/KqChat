@@ -78,4 +78,10 @@ public class UserTest {
         userVO.setFriends(friends);
         mongoUserService.insertUser(userVO);
     }
+
+    @Test
+    public void testSel() {
+        UserVO userVO = mongoUserService.userDetail("18062743820");
+        System.out.println(userVO);
+    }
 }

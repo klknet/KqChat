@@ -64,32 +64,32 @@ public class MongoUserService {
     用户详情
      */
     public UserVO userDetail(String userId) {
-        return mongoUserDao.findByUsernameOrUserId(userId);
+        return mongoUserDao.findUnique(userId);
     }
 
-    public UserVO login(String unique, String pwd) {
+    public UserDO login(String unique, String pwd) {
         if(StringUtils.isAnyEmpty(unique, pwd))
             return null;
         unique = decode(unique, "konglingkai");
         pwd = decode(pwd, "qintiantian");
-        UserVO userVO = mongoUserDao.findByUsernameOrUserId(unique);
+        UserVO userVO = mongoUserDao.findUnique(unique);
         if(userVO == null)
             return null;
         String encrptedpwd = DigestUtils.md5DigestAsHex((userVO.getSugar()+pwd).getBytes());
         if(userVO.getPwd().equals(encrptedpwd)) {
-            cacheUserState(userVO);
-            return userVO;
+            return cacheUserState(userVO);
         }
         return null;
     }
 
-    private void cacheUserState(UserVO userVO) {
+    private UserDO cacheUserState(UserVO userVO) {
         String cert = Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes());
         UserDO userDO = new UserDO();
         userDO.userId = userVO.getUserId();
         userDO.state = UserDO.State.ONLINE;
         userDO.certificate = cert;
         redisTemplate.opsForHash().put(ImsConstants.IMS_USER_CERT, userVO.getUserId(), JSON.toJSONString(userDO));
+        return userDO;
     }
 
     //解码
