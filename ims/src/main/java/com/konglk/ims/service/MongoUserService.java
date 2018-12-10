@@ -64,7 +64,7 @@ public class MongoUserService {
     用户详情
      */
     public UserVO userDetail(String userId) {
-        return mongoUserDao.findUnique(userId);
+        return mongoUserDao.findByUserId(userId);
     }
 
     public UserDO login(String unique, String pwd) {

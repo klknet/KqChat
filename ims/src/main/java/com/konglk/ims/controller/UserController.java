@@ -38,8 +38,7 @@ public class UserController {
 
     @GetMapping("/profile")
     public Object userProfile(@RequestParam("userId")String userId) {
-        Map<String,Object> userVO = userService.selectUserById(userId);
-        return userVO;
+        return mongoUserService.userDetail(userId);
     }
 
 
