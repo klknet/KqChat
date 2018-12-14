@@ -13,4 +13,6 @@ public interface MongoUserDao extends MongoRepository<UserVO, String> {
 
     @Query(value = "{'$or': [{'cellphone': ?0}, {'user_id':?0}]}")
     UserVO findUnique(String unique);
+
+
 }

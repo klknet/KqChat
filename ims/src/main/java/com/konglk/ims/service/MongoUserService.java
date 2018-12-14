@@ -6,11 +6,16 @@ import com.konglk.common.data.UserDO;
 import com.konglk.ims.dao.mongod.MongoUserDao;
 import com.konglk.ims.entity.UserVO;
 import com.konglk.ims.enums.UserConfig;
+import com.konglk.ims.utils.IdBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
@@ -27,6 +32,9 @@ public class MongoUserService {
 
     @Autowired
     private MongoUserDao mongoUserDao;
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -65,6 +73,18 @@ public class MongoUserService {
      */
     public UserVO userDetail(String userId) {
         return mongoUserDao.findByUserId(userId);
+    }
+
+    public void userUpdate(UserVO userVO) {
+        if(StringUtils.isEmpty(userVO.getUserId()))
+            return;
+        Query query = new Query();
+        query.addCriteria(Criteria.where("userId").is(userVO.getUserId()));
+        UserVO user = mongoTemplate.findOne(query, UserVO.class);
+        user.setCity(userVO.getCity());
+        user.setNickname(userVO.getNickname());
+        user.setUpdatetime(System.currentTimeMillis());
+        mongoTemplate.save(user);
     }
 
     public UserDO login(String unique, String pwd) {
@@ -114,6 +134,28 @@ public class MongoUserService {
     //下线
     public void offline(String userId) {
         redisTemplate.opsForHash().delete(ImsConstants.IMS_USER_CERT, userId);
+    }
+
+    public UserVO openConversation(String userId, String conversationId) {
+        if(!validUserAndConversation(userId, conversationId))
+            throw new IllegalArgumentException("会话窗口不存在");
+        Query query = new Query(Criteria.where("userId").is(userId));
+        Update update = new Update();
+        update.push("conversations", new UserVO.Conversation(conversationId, System.currentTimeMillis()));
+        return mongoTemplate.findAndModify(query, update, UserVO.class);
+    }
+
+    public UserVO createConversation(String userId) {
+        Query query = new Query(Criteria.where("userId").is(userId));
+        Update update = new Update();
+        update.push("conversations", new UserVO.Conversation(IdBuilder.buildId(), System.currentTimeMillis()));
+        return mongoTemplate.findAndModify(query, update, UserVO.class);
+    }
+
+    protected boolean validUserAndConversation(String userId, String conversationId) {
+        Query query = new Query(Criteria.where("userId").is(userId));
+        query.addCriteria(Criteria.where("conversations").in(conversationId));
+        return mongoTemplate.exists(query, UserVO.class);
     }
 
 }

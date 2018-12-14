@@ -38,10 +38,13 @@ public class UserVO {
     private Integer status;
     private Long updatetime;
     private List<Friend> friends;
+    private List<Conversation> conversations;
     @Transient
     public UserDO.State state;
 
     public static class Friend {
+        @Indexed
+        @Field("user_id")
         private String userId;
         private String username;
         private String nickname;
@@ -87,6 +90,21 @@ public class UserVO {
 
         public void setImgUrl(String imgUrl) {
             this.imgUrl = imgUrl;
+        }
+    }
+
+    public static class Conversation {
+        @Indexed
+        @Field("conversation_id")
+        private String conversationId;
+        private Long ts;
+
+        public Conversation() {
+        }
+
+        public Conversation(String conversationId, Long ts) {
+            this.conversationId = conversationId;
+            this.ts = ts;
         }
     }
 
@@ -209,4 +227,13 @@ public class UserVO {
     public void setFriends(List<Friend> friends) {
         this.friends = friends;
     }
+
+    public List<Conversation> getConversations() {
+        return conversations;
+    }
+
+    public void setConversations(List<Conversation> conversations) {
+        this.conversations = conversations;
+    }
+
 }
