@@ -16,88 +16,52 @@ import java.util.List;
  * Created by konglk on 2018/12/6.
  */
 @Document(collection = "user")
-@JsonIgnoreProperties(value = {"pwd", "id", "sugar"})
+@JsonIgnoreProperties(value = {"pwd", "id", "sugar, updatetime"})
 public class UserVO {
     @Id
-    private String id;
+    public String id;
     @Indexed(unique = true)
     @Field("user_id")
-    private String userId;
-    private String username;
-    private String nickname;
-    private String pwd;
-    private String sugar;
+    public String userId;
+    public String username;
+    public String nickname;
+    public String pwd;
+    public String sugar;
     @Field("img_url")
-    private String imgUrl;
+    public String imgUrl;
     @Indexed(unique = true)
-    private String cellphone;
-    private Integer sex;
-    private String country;
-    private String city;
-    private Long createtime;
-    private Integer status;
-    private Long updatetime;
-    private List<Friend> friends;
-    private List<Conversation> conversations;
+    public String cellphone;
+    public Integer sex;
+    public String country;
+    public String city;
+    public Long createtime;
+    public Integer status;
+    public Long updatetime;
+    public String signature;
+    public List<Friend> friends;
+    public List<Conversation> conversations;
     @Transient
     public UserDO.State state;
 
     public static class Friend {
         @Indexed
         @Field("user_id")
-        private String userId;
-        private String username;
-        private String nickname;
-        private String notename;
+        public String userId;
+        public String username;
+        public String nickname;
+        public String notename;
         @Field("img_url")
-        private String imgUrl;
-
-        public String getUserId() {
-            return userId;
-        }
-
-        public void setUserId(String userId) {
-            this.userId = userId;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getNickname() {
-            return nickname;
-        }
-
-        public void setNickname(String nickname) {
-            this.nickname = nickname;
-        }
-
-        public String getNotename() {
-            return notename;
-        }
-
-        public void setNotename(String notename) {
-            this.notename = notename;
-        }
-
-        public String getImgUrl() {
-            return imgUrl;
-        }
-
-        public void setImgUrl(String imgUrl) {
-            this.imgUrl = imgUrl;
-        }
+        public String imgUrl;
+        public Integer sex;
+        public String city;
+        public String signature;
     }
 
     public static class Conversation {
         @Indexed
         @Field("conversation_id")
-        private String conversationId;
-        private Long ts;
+        public String conversationId;
+        public Long ts;
 
         public Conversation() {
         }
@@ -108,132 +72,5 @@ public class UserVO {
         }
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getPwd() {
-        return pwd;
-    }
-
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
-    }
-
-    public String getSugar() {
-        return sugar;
-    }
-
-    public void setSugar(String sugar) {
-        this.sugar = sugar;
-    }
-
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
-
-    public String getCellphone() {
-        return cellphone;
-    }
-
-    public void setCellphone(String cellphone) {
-        this.cellphone = cellphone;
-    }
-
-    public Integer getSex() {
-        return sex;
-    }
-
-    public void setSex(Integer sex) {
-        this.sex = sex;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public Long getCreatetime() {
-        return createtime;
-    }
-
-    public void setCreatetime(Long createtime) {
-        this.createtime = createtime;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Long getUpdatetime() {
-        return updatetime;
-    }
-
-    public void setUpdatetime(Long updatetime) {
-        this.updatetime = updatetime;
-    }
-
-    public List<Friend> getFriends() {
-        return friends;
-    }
-
-    public void setFriends(List<Friend> friends) {
-        this.friends = friends;
-    }
-
-    public List<Conversation> getConversations() {
-        return conversations;
-    }
-
-    public void setConversations(List<Conversation> conversations) {
-        this.conversations = conversations;
-    }
 
 }

@@ -41,13 +41,13 @@ public class MongoUserService {
     RedisTemplate redisTemplate;
 
     public void insertUser(UserVO userVO) {
-        userVO.setSugar(Base64Utils.encodeToString(UUID.randomUUID().toString().getBytes()));
-        String pwd = userVO.getPwd();
-        String sugar = userVO.getSugar();
-        userVO.setPwd(DigestUtils.md5DigestAsHex((sugar + pwd).getBytes()));
-        userVO.setCreatetime(System.currentTimeMillis());
-        userVO.setUpdatetime(System.currentTimeMillis());
-        userVO.setStatus(UserConfig.UserStatus.NORMAL.v);
+        userVO.sugar = Base64Utils.encodeToString(UUID.randomUUID().toString().getBytes());
+        String pwd = userVO.pwd;
+        String sugar = userVO.sugar;
+        userVO.pwd = DigestUtils.md5DigestAsHex((sugar + pwd).getBytes());
+        userVO.createtime = System.currentTimeMillis();
+        userVO.updatetime = System.currentTimeMillis();
+        userVO.status = UserConfig.UserStatus.NORMAL.v;
         mongoUserDao.save(userVO);
     }
 
@@ -63,7 +63,7 @@ public class MongoUserService {
             users = mongoUserDao.findAll(example, pageable);
         }
         return users.map(userInfoDO -> {
-            userInfoDO.state = userState(userInfoDO.getUserId());
+            userInfoDO.state = userState(userInfoDO.userId);
             return userInfoDO;
         });
     }
@@ -76,14 +76,14 @@ public class MongoUserService {
     }
 
     public void userUpdate(UserVO userVO) {
-        if(StringUtils.isEmpty(userVO.getUserId()))
+        if(StringUtils.isEmpty(userVO.userId))
             return;
         Query query = new Query();
-        query.addCriteria(Criteria.where("userId").is(userVO.getUserId()));
+        query.addCriteria(Criteria.where("userId").is(userVO.userId));
         UserVO user = mongoTemplate.findOne(query, UserVO.class);
-        user.setCity(userVO.getCity());
-        user.setNickname(userVO.getNickname());
-        user.setUpdatetime(System.currentTimeMillis());
+        user.city = userVO.city;
+        user.nickname = userVO.nickname;
+        user.updatetime = System.currentTimeMillis();
         mongoTemplate.save(user);
     }
 
@@ -95,8 +95,8 @@ public class MongoUserService {
         UserVO userVO = mongoUserDao.findUnique(unique);
         if(userVO == null)
             return null;
-        String encrptedpwd = DigestUtils.md5DigestAsHex((userVO.getSugar()+pwd).getBytes());
-        if(userVO.getPwd().equals(encrptedpwd)) {
+        String encrptedpwd = DigestUtils.md5DigestAsHex((userVO.sugar+pwd).getBytes());
+        if(userVO.pwd.equals(encrptedpwd)) {
             return cacheUserState(userVO);
         }
         return null;
@@ -105,10 +105,10 @@ public class MongoUserService {
     private UserDO cacheUserState(UserVO userVO) {
         String cert = Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes());
         UserDO userDO = new UserDO();
-        userDO.userId = userVO.getUserId();
+        userDO.userId = userVO.userId;
         userDO.state = UserDO.State.ONLINE;
         userDO.certificate = cert;
-        redisTemplate.opsForHash().put(ImsConstants.IMS_USER_CERT, userVO.getUserId(), JSON.toJSONString(userDO));
+        redisTemplate.opsForHash().put(ImsConstants.IMS_USER_CERT, userVO.userId, JSON.toJSONString(userDO));
         return userDO;
     }
 
