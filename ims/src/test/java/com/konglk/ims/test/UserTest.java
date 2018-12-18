@@ -48,34 +48,28 @@ public class UserTest {
     @Test
     public void testInsertUser() {
         UserVO userVO = new UserVO();
-        userVO.setUsername("maomao");
-        userVO.setNickname("毛毛");
-        userVO.setPwd("maomao");
-        userVO.setCellphone("18510396861");
-        userVO.setCity("wuhan");
-        userVO.setImgUrl("http://39.106.133.40/imgs/maomao.jpg");
-        userVO.setSex(1);
-        userVO.setCountry("cn");
-        userVO.setUserId("62eae00a-6f47-48bb-865e-acb3aa3483ee");
+        userVO.username= ("konglk");
+        userVO.nickname = ("千里阵云");
+        userVO.pwd = ("konglk");
+        userVO.cellphone = ("18062743820");
+        userVO.city = ("wuhan");
+        userVO.imgUrl =("http://39.106.133.40/imgs/konglk.jpg");
+        userVO.sex = (1);
+        userVO.country = ("cn");
+        userVO.userId = ("eb7687c6-da11-4d23-bc71-36c4a12b2247");
+        userVO.signature = "巧者劳而智者忧";
 
         List<UserVO.Friend> friends = new ArrayList<>();
-        UserVO.Friend f1 = new UserVO.Friend();
-        f1.setUserId("eb7687c6-da11-4d23-bc71-36c4a12b2247");
-        f1.setUsername("konglk");
-        f1.setNotename("爸爸");
-        f1.setImgUrl("http://39.106.133.40/imgs/konglk.jpg");
-        f1.setNickname("千里阵云");
-        friends.add(f1);
 
         UserVO.Friend f2 = new UserVO.Friend();
-        f2.setUserId("78ad305d-226e-4155-93e2-357ce376a194");
-        f2.setUsername("konglk");
-        f2.setNotename("妈妈");
-        f2.setImgUrl("http://39.106.133.40/imgs/qintian.jpg");
-        f2.setNickname("左耳");
+        f2.userId = ("78ad305d-226e-4155-93e2-357ce376a194");
+        f2.username = ("qintian");
+        f2.notename = ("老婆");
+        f2.imgUrl = ("http://39.106.133.40/imgs/qintian.jpg");
+        f2.nickname = ("左耳");
         friends.add(f2);
 
-        userVO.setFriends(friends);
+        userVO.friends = (friends);
         mongoUserService.insertUser(userVO);
     }
 

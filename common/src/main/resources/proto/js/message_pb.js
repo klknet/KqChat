@@ -749,7 +749,8 @@ proto.CPrivateChat.toObject = function(includeInstance, msg) {
     seqnum: jspb.Message.getFieldWithDefault(msg, 6, 0),
     ts: jspb.Message.getFieldWithDefault(msg, 7, 0),
     msgid: jspb.Message.getFieldWithDefault(msg, 8, ""),
-    extname: jspb.Message.getFieldWithDefault(msg, 9, "")
+    extname: jspb.Message.getFieldWithDefault(msg, 9, ""),
+    conversationid: jspb.Message.getFieldWithDefault(msg, 10, "")
   };
 
   if (includeInstance) {
@@ -821,6 +822,10 @@ proto.CPrivateChat.deserializeBinaryFromReader = function(msg, reader) {
     case 9:
       var value = /** @type {string} */ (reader.readString());
       msg.setExtname(value);
+      break;
+    case 10:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setConversationid(value);
       break;
     default:
       reader.skipField();
@@ -911,6 +916,13 @@ proto.CPrivateChat.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeString(
       9,
+      f
+    );
+  }
+  f = message.getConversationid();
+  if (f.length > 0) {
+    writer.writeString(
+      10,
       f
     );
   }
@@ -1092,6 +1104,21 @@ proto.CPrivateChat.prototype.getExtname = function() {
 /** @param {string} value */
 proto.CPrivateChat.prototype.setExtname = function(value) {
   jspb.Message.setProto3StringField(this, 9, value);
+};
+
+
+/**
+ * optional string conversationId = 10;
+ * @return {string}
+ */
+proto.CPrivateChat.prototype.getConversationid = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 10, ""));
+};
+
+
+/** @param {string} value */
+proto.CPrivateChat.prototype.setConversationid = function(value) {
+  jspb.Message.setProto3StringField(this, 10, value);
 };
 
 

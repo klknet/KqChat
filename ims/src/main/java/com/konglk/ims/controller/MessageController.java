@@ -1,8 +1,9 @@
 package com.konglk.ims.controller;
 
 import com.konglk.common.constant.ImsConstants;
-import com.konglk.common.entity.MsgVO;
 import com.konglk.common.model.Protocol;
+import com.konglk.ims.entity.MsgVO;
+import com.konglk.ims.service.MongoMsgService;
 import com.konglk.ims.service.MsgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,8 @@ import java.util.List;
 public class MessageController {
     @Autowired
     private MsgService msgService;
+    @Autowired
+    private MongoMsgService mongoMsgService;
 
     @GetMapping("/notifyReaded")
     public Object notifyReaded(@RequestParam String userId, @RequestParam String destId) {
@@ -36,6 +39,11 @@ public class MessageController {
         return "";
     }
 
+    @GetMapping("/messages")
+    public Object messages(@RequestParam String userId, @RequestParam String conversationId, @RequestParam String msgId, @RequestParam int self) {
+        return mongoMsgService.messages(userId, conversationId, msgId, self);
+    }
+
     @GetMapping("/historymessage/{userId}/{destId}/images")
     public Object messageImages(@PathVariable String userId, @PathVariable String destId) {
         return msgService.selectImagesById(userId, destId);
@@ -46,8 +54,8 @@ public class MessageController {
      */
     @PostMapping(value = "/persistMsg", consumes = "application/x-protobuf")
     public void persistMsg(@RequestBody Protocol.CPrivateChat msg) {
-        MsgVO msgVO = msgService.buildMsg(msg);
-        msgService.insertMsg(msgVO);
+        MsgVO msgVO = mongoMsgService.buildMsg(msg);
+        mongoMsgService.insertMsg(msgVO);
     }
 
     /*

@@ -61,15 +61,32 @@ public class UserVO {
         @Indexed
         @Field("conversation_id")
         public String conversationId;
+        @Field("user_id")
+        public String userId;
         public Long ts;
+        @Field("img_url")
+        public String imgUrl;
+        public String notename;
+        @Field("last_date")
+        public Long lastDate;
+        @Field("msg_id")
+        public String msgId;
+        @Field("last_msg")
+        public String lastMsg;
+        @Field("msg_type")
+        public Integer msgType;
+        @Transient
+        public Long unreadCount = 0L;
 
         public Conversation() {
         }
 
-        public Conversation(String conversationId, Long ts) {
+        public Conversation(String conversationId, String userId, Long ts) {
             this.conversationId = conversationId;
+            this.userId = userId;
             this.ts = ts;
         }
+
     }
 
 

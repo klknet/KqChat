@@ -1,6 +1,7 @@
 package com.konglk.ims.controller;
 
 import com.konglk.ims.service.ConversationService;
+import com.konglk.ims.service.MongoConversationService;
 import com.konglk.ims.service.MongoUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class ConversationController {
     @Autowired
     private ConversationService conversationService;
     @Autowired
-    private MongoUserService mongoUserService;
+    private MongoConversationService mongoConversationService;
 
     @GetMapping("/conversationList/{userId}")
     public Object conversationList(@PathVariable String userId) {
@@ -23,13 +24,13 @@ public class ConversationController {
     }
 
     @PostMapping("/create")
-    public Object create(String userId) {
-        return mongoUserService.createConversation(userId);
+    public Object create(String userId, String destId) {
+        return mongoConversationService.createConversation(userId, destId, null);
     }
 
     @PostMapping("/open")
-    public Object open(String userId, String conversationId) {
-        return mongoUserService.openConversation(conversationId, userId);
+    public Object open(String userId, String destId, String conversationId) {
+        return mongoConversationService.createConversation(userId, destId, conversationId);
     }
 
 }

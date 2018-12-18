@@ -6,7 +6,7 @@ import com.konglk.common.data.UserDO;
 import com.konglk.ims.dao.mongod.MongoUserDao;
 import com.konglk.ims.entity.UserVO;
 import com.konglk.ims.enums.UserConfig;
-import com.konglk.ims.utils.IdBuilder;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -15,9 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.DigestUtils;
 
@@ -36,7 +36,7 @@ public class MongoUserService {
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    private UserService userService;
+    private MsgService msgService;
     @Autowired
     RedisTemplate redisTemplate;
 
@@ -72,7 +72,14 @@ public class MongoUserService {
     用户详情
      */
     public UserVO userDetail(String userId) {
-        return mongoUserDao.findByUserId(userId);
+        UserVO userVO = mongoUserDao.findByUserId(userId);
+        Assert.notNull(userVO, "not exist user id");
+        if(CollectionUtils.isNotEmpty(userVO.conversations)) {
+            userVO.conversations.forEach(c->{
+                c.unreadCount = msgService.getUnreadCount(userId, c.userId);
+            });
+        }
+        return userVO;
     }
 
     public void userUpdate(UserVO userVO) {
@@ -136,26 +143,8 @@ public class MongoUserService {
         redisTemplate.opsForHash().delete(ImsConstants.IMS_USER_CERT, userId);
     }
 
-    public UserVO openConversation(String userId, String conversationId) {
-        if(!validUserAndConversation(userId, conversationId))
-            throw new IllegalArgumentException("会话窗口不存在");
-        Query query = new Query(Criteria.where("userId").is(userId));
-        Update update = new Update();
-        update.push("conversations", new UserVO.Conversation(conversationId, System.currentTimeMillis()));
-        return mongoTemplate.findAndModify(query, update, UserVO.class);
-    }
 
-    public UserVO createConversation(String userId) {
-        Query query = new Query(Criteria.where("userId").is(userId));
-        Update update = new Update();
-        update.push("conversations", new UserVO.Conversation(IdBuilder.buildId(), System.currentTimeMillis()));
-        return mongoTemplate.findAndModify(query, update, UserVO.class);
+    public UserVO findByUserId(String userId) {
+        return mongoUserDao.findByUserId(userId);
     }
-
-    protected boolean validUserAndConversation(String userId, String conversationId) {
-        Query query = new Query(Criteria.where("userId").is(userId));
-        query.addCriteria(Criteria.where("conversations").in(conversationId));
-        return mongoTemplate.exists(query, UserVO.class);
-    }
-
 }
