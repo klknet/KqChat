@@ -1,8 +1,10 @@
 package com.konglk.ims.service;
 
+import com.konglk.ims.aop.ProcessUser;
 import com.konglk.ims.entity.MsgVO;
 import com.konglk.ims.entity.UserVO;
 import com.konglk.ims.utils.IdBuilder;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by konglk on 2018/12/17.
@@ -49,24 +53,21 @@ public class MongoConversationService {
     /*
     创建会话，如果聊天一方删了会话，新开的窗口保持在原有会话上
      */
+    @ProcessUser
     public UserVO createConversation(String userId, String destId, String conversationId) {
-        UserVO destVO = mongoUserService.findByUserId(destId);
         UserVO userVO = mongoUserService.findByUserId(userId);
+        UserVO destVO = mongoUserService.findByUserId(destId);
         if(!ObjectUtils.allNotNull(destVO, userVO)){
             throw new IllegalArgumentException();
         }
         UserVO.Conversation conversation = buildConversation(userVO, destVO, conversationId);
-        if(StringUtils.isEmpty(conversationId)) {
-            UserVO.Conversation destConversation = buildConversation(destVO, userVO, conversation.conversationId);
-            updateUserConversation(destConversation, destId);
-        }
-        return updateUserConversation(conversation, userId);
+        return pushConversation(conversation, userId);
     }
 
     /*
-    更新用户会话
+    新加用户会话
      */
-    protected UserVO updateUserConversation(UserVO.Conversation conversation, String userId) {
+    protected UserVO pushConversation(UserVO.Conversation conversation, String userId) {
         Query query = new Query(Criteria.where("userId").is(userId));
         Update update = new Update();
         update.push("conversations", conversation);
@@ -75,7 +76,30 @@ public class MongoConversationService {
     }
 
     /*
-    构建会话
+    删除会话
+     */
+    @ProcessUser
+    public UserVO deleteConversation(String userId, String conversationId) {
+        UserVO userVO = mongoUserService.findByUserId(userId);
+        if(userVO != null) {
+            return this.pullConversation(this.findConversation(userVO.conversations, conversationId), userId);
+        }
+        return null;
+    }
+
+    protected UserVO pullConversation(UserVO.Conversation conversation, String userId) {
+        if(conversation == null) {
+            return null;
+        }
+        Query query = new Query(Criteria.where("userId").is(userId));
+        Update update = new Update();
+        update.pull("conversations", conversation);
+        FindAndModifyOptions findAndModifyOptions = FindAndModifyOptions.options().returnNew(true);
+        return mongoTemplate.findAndModify(query, update, findAndModifyOptions, UserVO.class);
+    }
+
+    /*
+    构建会话,如果对方存在会话，新的会话构建在原有会话之上
      */
     protected UserVO.Conversation buildConversation(UserVO userVO, UserVO destVO, String conversationId) {
         UserVO.Conversation conversation = new UserVO.Conversation();
@@ -83,6 +107,12 @@ public class MongoConversationService {
         if(StringUtils.isEmpty(conversationId)) {
             conversationId = IdBuilder.buildId();
             conversation.lastDate = conversation.ts;//新开会话给当前时间
+        }else {
+            for(UserVO.Conversation c : destVO.conversations) {
+                if(c.userId.equals(userVO.userId)) {
+                    conversationId = c.conversationId;
+                }
+            }
         }
         conversation.imgUrl = destVO.imgUrl;
         conversation.userId = destVO.userId;
@@ -103,4 +133,9 @@ public class MongoConversationService {
         return mongoTemplate.exists(query, UserVO.class);
     }
 
+
+
+    private UserVO.Conversation findConversation(List<UserVO.Conversation> conversationList, String conversationId) {
+        return conversationList.stream().filter(p->conversationId.equals(p.conversationId)).findFirst().get();
+    }
 }

@@ -75,6 +75,8 @@ public class UserVO {
         public String lastMsg;
         @Field("msg_type")
         public Integer msgType;
+        @Field
+        public Boolean stick;
         @Transient
         public Long unreadCount = 0L;
 

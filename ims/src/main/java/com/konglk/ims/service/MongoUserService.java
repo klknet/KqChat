@@ -3,6 +3,7 @@ package com.konglk.ims.service;
 import com.alibaba.fastjson.JSON;
 import com.konglk.common.constant.ImsConstants;
 import com.konglk.common.data.UserDO;
+import com.konglk.ims.aop.ProcessUser;
 import com.konglk.ims.dao.mongod.MongoUserDao;
 import com.konglk.ims.entity.UserVO;
 import com.konglk.ims.enums.UserConfig;
@@ -22,6 +23,7 @@ import org.springframework.util.Base64Utils;
 import org.springframework.util.DigestUtils;
 
 import java.util.Base64;
+import java.util.Collections;
 import java.util.UUID;
 
 /**
@@ -71,16 +73,14 @@ public class MongoUserService {
     /*
     用户详情
      */
+    @ProcessUser
     public UserVO userDetail(String userId) {
         UserVO userVO = mongoUserDao.findByUserId(userId);
         Assert.notNull(userVO, "not exist user id");
-        if(CollectionUtils.isNotEmpty(userVO.conversations)) {
-            userVO.conversations.forEach(c->{
-                c.unreadCount = msgService.getUnreadCount(userId, c.userId);
-            });
-        }
         return userVO;
     }
+
+
 
     public void userUpdate(UserVO userVO) {
         if(StringUtils.isEmpty(userVO.userId))
@@ -147,4 +147,6 @@ public class MongoUserService {
     public UserVO findByUserId(String userId) {
         return mongoUserDao.findByUserId(userId);
     }
+
+
 }

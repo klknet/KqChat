@@ -60,7 +60,6 @@ public class BeanConfig {
         return redisTemplate;
     }
 
-    @Bean
     public FilterRegistrationBean corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
