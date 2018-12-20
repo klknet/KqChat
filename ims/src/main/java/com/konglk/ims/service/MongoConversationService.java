@@ -112,6 +112,9 @@ public class MongoConversationService {
             for(UserVO.Conversation c : destVO.conversations) {
                 if(c.conversationId.equals(conversationId)) {
                     valid = true;
+                    conversation.ts = c.ts;
+                    conversation.msgId = c.msgId;
+                    conversation.msgType = c.msgType;
                     break;
                 }
             }
