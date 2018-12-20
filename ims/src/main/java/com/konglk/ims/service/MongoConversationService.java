@@ -108,10 +108,15 @@ public class MongoConversationService {
             conversationId = IdBuilder.buildId();
             conversation.lastDate = conversation.ts;//新开会话给当前时间
         }else {
+            boolean valid = false;
             for(UserVO.Conversation c : destVO.conversations) {
-                if(c.userId.equals(userVO.userId)) {
-                    conversationId = c.conversationId;
+                if(c.conversationId.equals(conversationId)) {
+                    valid = true;
+                    break;
                 }
+            }
+            if(!valid) {
+                throw new IllegalArgumentException("invalid conversation id");
             }
         }
         conversation.imgUrl = destVO.imgUrl;
