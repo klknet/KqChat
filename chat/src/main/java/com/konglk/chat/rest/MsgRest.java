@@ -2,7 +2,6 @@ package com.konglk.chat.rest;
 
 import com.konglk.common.model.Protocol;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -32,6 +31,9 @@ public class MsgRest extends BaseRest {
         restTemplate.put(ims+"/msg/increment?userId={userId}&destId={destId}&delta={delta}", null, userId, destId, delta);
     }
 
+    /*
+    上传文件
+     */
     public String storeFile(byte[] buff, String extName) {
         ByteArrayResource resource = new ByteArrayResource(buff){
             @Override
@@ -44,6 +46,16 @@ public class MsgRest extends BaseRest {
         String s = restTemplate.postForObject(ims + "/msg/storeFile", params, String.class, extName);
         System.out.println(s);
         return s;
+    }
+
+    /*
+    创建会话
+     */
+    public Object createConversation(String userId, String destId) {
+        MultiValueMap params = new LinkedMultiValueMap();
+        params.add("userId", userId);
+        params.add("destId", destId);
+        return restTemplate.postForEntity(ims + "/conversation/create", params, String.class);
     }
 }
 

@@ -28,26 +28,36 @@ public class MongoConversationService {
     private MongoUserService mongoUserService;
 
     /*
-    更新会话
+    处理会话
      */
-    protected void updateConversation(String userId, String conversationId, MsgVO msgVO) {
+    protected void processConversation(MsgVO msgVO, String userId, String destId) {
+        UserVO userVO = mongoUserService.findByUserId(userId);
         Query query = new Query();
         query.addCriteria(Criteria.where("userId").is(userId));
-        query.addCriteria(Criteria.where("conversations.conversationId").is(conversationId));
         Update update = new Update();
-        update.set("conversations.$.lastDate", msgVO.getTs());
-        update.set("conversations.$.msgId", msgVO.getMsgId());
-        update.set("conversations.$.msgType", msgVO.getMsgType());
-        update.set("conversations.$.lastMsg", msgVO.getContent());
-        mongoTemplate.updateFirst(query, update, UserVO.class);
+        if(userVO.conversations.stream().anyMatch(c -> msgVO.getConversationId().equals(c.conversationId))) {
+            query.addCriteria(Criteria.where("conversations.conversationId").is(msgVO.getConversationId()));
+            update.set("conversations.$.lastDate", msgVO.getTs());
+            update.set("conversations.$.msgId", msgVO.getMsgId());
+            update.set("conversations.$.msgType", msgVO.getMsgType());
+            update.set("conversations.$.lastMsg", msgVO.getContent());
+            mongoTemplate.updateFirst(query, update, UserVO.class);
+        } else {
+            UserVO destVO = mongoUserService.findByUserId(destId);
+            UserVO.Conversation conv = buildConversation(userVO, destVO, msgVO.getTs());
+            update.push("conversations", conv);
+            mongoTemplate.findAndModify(query, update, UserVO.class);
+        }
+
+
     }
 
     /*
-    更新会话最后一条信息
+    有新消息时，更新会话最后一条信息
      */
     public void updateConversation(MsgVO msgVO) {
-        this.updateConversation(msgVO.getSendId(), msgVO.getConversationId(), msgVO);
-        this.updateConversation(msgVO.getDestId(), msgVO.getConversationId(), msgVO);
+        this.processConversation(msgVO, msgVO.getSendId(), msgVO.getDestId());
+        this.processConversation(msgVO, msgVO.getDestId(), msgVO.getSendId());
     }
 
     /*
@@ -60,7 +70,7 @@ public class MongoConversationService {
         if(!ObjectUtils.allNotNull(destVO, userVO)){
             throw new IllegalArgumentException();
         }
-        UserVO.Conversation conversation = buildConversation(userVO, destVO, conversationId);
+        UserVO.Conversation conversation = buildConversation(userVO, destVO, System.currentTimeMillis());
         return pushConversation(conversation, userId);
     }
 
@@ -101,26 +111,25 @@ public class MongoConversationService {
     /*
     构建会话,如果对方存在会话，新的会话构建在原有会话之上
      */
-    protected UserVO.Conversation buildConversation(UserVO userVO, UserVO destVO, String conversationId) {
+    protected UserVO.Conversation buildConversation(UserVO userVO, UserVO destVO, long ts) {
         UserVO.Conversation conversation = new UserVO.Conversation();
-        conversation.ts = System.currentTimeMillis();
-        if(StringUtils.isEmpty(conversationId)) {
+        String conversationId = null;
+        conversation.ts = ts;
+        boolean valid = false;
+        for(UserVO.Conversation c : destVO.conversations) {
+            if(c.userId.equals(userVO.userId)) {
+                valid = true;
+                conversation.msgId = c.msgId;
+                conversation.msgType = c.msgType;
+                conversation.lastMsg = c.lastMsg;
+                conversation.lastDate = c.lastDate;
+                conversationId = c.conversationId;
+                break;
+            }
+        }
+        if(!valid) {
             conversationId = IdBuilder.buildId();
             conversation.lastDate = conversation.ts;//新开会话给当前时间
-        }else {
-            boolean valid = false;
-            for(UserVO.Conversation c : destVO.conversations) {
-                if(c.conversationId.equals(conversationId)) {
-                    valid = true;
-                    conversation.ts = c.ts;
-                    conversation.msgId = c.msgId;
-                    conversation.msgType = c.msgType;
-                    break;
-                }
-            }
-            if(!valid) {
-                throw new IllegalArgumentException("invalid conversation id");
-            }
         }
         conversation.imgUrl = destVO.imgUrl;
         conversation.userId = destVO.userId;

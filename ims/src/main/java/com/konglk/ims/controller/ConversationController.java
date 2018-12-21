@@ -28,11 +28,6 @@ public class ConversationController {
         return mongoConversationService.createConversation(userId, destId, null);
     }
 
-    @PostMapping("/open")
-    public Object open(String userId, String destId, String conversationId) {
-        return mongoConversationService.createConversation(userId, destId, conversationId);
-    }
-
     @GetMapping("/delete")
     public Object delete(String userId, String conversationId) {
         return mongoConversationService.deleteConversation(userId, conversationId);
