@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 /**
  * Created by konglk on 2018/12/13.
  */
-@Document(collection = "message")
+@Document(collection = "c_message")
 public class MsgVO {
     @Id
     private String id;

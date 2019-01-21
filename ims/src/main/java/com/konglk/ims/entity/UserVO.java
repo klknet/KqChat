@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by konglk on 2018/12/6.
  */
-@Document(collection = "user")
+@Document(collection = "c_user")
 @JsonIgnoreProperties(value = {"pwd", "id", "sugar, updatetime"})
 public class UserVO {
     @Id

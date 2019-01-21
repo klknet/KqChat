@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by konglk on 2018/11/21.
  */
-@Document(collection = "sys_user")
+@Document(collection = "c_sys_user")
 public class SysUserVO extends BaseEntity {
 
     @Id
